@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 public class RightPanel extends JPanel implements PropertyChangeListener {
 
@@ -23,17 +24,18 @@ public class RightPanel extends JPanel implements PropertyChangeListener {
 
 
 
+
     public RightPanel(Pizarron modelo) {
         super(new GridBagLayout());
         this.modelo = modelo;
-        modelo.getImagen().addObserver(this);
+        modelo.addObserver(this);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 0, 10, 0);
 
-        infoImagenLabel = new JLabel("Tamaño: " );
+        infoImagenLabel = new JLabel("Tamaño: 0 x 0" );
 
         add(infoImagenLabel, gbc);
 
@@ -46,13 +48,13 @@ public class RightPanel extends JPanel implements PropertyChangeListener {
             }
         };
         actualColorButton.setMinimumSize(new Dimension(60, 60));
-        actualColorButton.setBackground(modelo.getColorActual());
+        actualColorButton.setBackground(new Color(modelo.getColorActual()));
         actualColorButton.setBorderPainted(false);
         actualColorButton.addActionListener(e -> {
 
-            Color nuevoColor = JColorChooser.showDialog(this, "Select Color", modelo.getColorActual());
+            Color nuevoColor = JColorChooser.showDialog(this, "Select Color", new Color(modelo.getColorActual()));
             if (nuevoColor != null) {
-                modelo.setColorActual(nuevoColor);
+                modelo.setColorActual(nuevoColor.getRGB());
                 logger.info("Nuevo color seleccionado para pintar");
             }
 
@@ -83,17 +85,10 @@ public class RightPanel extends JPanel implements PropertyChangeListener {
     }
 
 
-
-
-
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         infoImagenLabel.setText("Tamaño: " + modelo.getImagen().getWidth() + " x " + modelo.getImagen().getHeight());
         rangoLabel.setText("Rango: " + modelo.getRango());
-    }
-
-    public HerramientasPanel getHerramientasPanel() {
-        return herramientasPanel;
+        actualColorButton.setBackground(new Color(modelo.getColorActual()));
     }
 }

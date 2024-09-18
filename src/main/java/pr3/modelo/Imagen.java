@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
@@ -16,12 +17,11 @@ public class Imagen {
     private int width;
     private int height;
     private PropertyChangeSupport supportObserver;
-    private FloodFill painter;
 
     public Imagen() {
         pixeles = new int[][]{};
         supportObserver = new PropertyChangeSupport(this);
-        painter = new FloodFill();
+
     }
 
     public void setPixeles(int[][] nuevosPixeles) {
@@ -36,23 +36,17 @@ public class Imagen {
 
     }
 
-    public void pintar(Point point, int color, int rango) {
-        logger.info("Se han pintado pixeles con la cubeta");
-        setPixeles(painter.floodFill(pixeles, point.x, point.y, color, rango));
-    }
-
     public void addObserver(PropertyChangeListener observer) {
         supportObserver.addPropertyChangeListener(observer);
         logger.debug("Se ha añadido un nuevo observador");
     }
 
     public void dibujar(Graphics g) {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                g.setColor(new Color(pixeles[i][j]));
-                g.fillRect(i, j, 1, 1);
-            }
+        if(width==0 && height==0){
+            return;
         }
+        Image img = createImageFromMatrix(pixeles, width, height);
+        g.drawImage(img, 0,0, null);
         logger.debug("Se han pintado los pixeles en el panel principal");
     }
 
@@ -70,6 +64,15 @@ public class Imagen {
 
     public boolean contains(Point point){
         return (point.x > 0 && point.x < width && point.y > 0 && point.y <height);
+    }
+    private Image createImageFromMatrix(int[][] pixels, int width, int height) {
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                img.setRGB(x, y, pixels[x][y]);
+            }
+        }
+        return img;
     }
 
 

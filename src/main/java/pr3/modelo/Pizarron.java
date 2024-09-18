@@ -1,23 +1,34 @@
 package pr3.modelo;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 public class Pizarron {
     private Imagen imagen;
-    private Color colorActual;
+    private int colorActual;
     private String herramientaSeleccionada;
     private int rango;
 
     public static final String HERRAMIENTA_CUBETA = "CUBETA";
-    public static String HERRAMIENTA_PINCEL = "PINCEL";
-    public static String HERRAMIENTA_LINEA = "LINEA";
-    public static String HERRAMIENTA_RECTANGULO = "RECTANGULO";
+    public static final String HERRAMIENTA_PINCEL = "PINCEL";
+    public static final String HERRAMIENTA_LINEA = "LINEA";
+    public static final String HERRAMIENTA_RECTANGULO = "RECTANGULO";
+
+    private static final Logger logger = LogManager.getRootLogger();
+    private PropertyChangeSupport supportObserver;
+    private final String OBSERVER_COLOR = "OBSERVABLE_COLOR";
+    private final String OBSERVER_RANGO = "OBSERVABLE_RANGO";
 
 
     public Pizarron(Imagen imagen){
         this.imagen = imagen;
-        this.colorActual = Color.WHITE;
+        this.colorActual = Color.WHITE.getRGB();
         this.rango = 10;
+        supportObserver = new PropertyChangeSupport(this);
     }
 
     public Imagen getImagen() {
@@ -28,12 +39,15 @@ public class Pizarron {
         this.imagen = imagen;
     }
 
-    public Color getColorActual() {
+    public int getColorActual() {
         return colorActual;
     }
 
-    public void setColorActual(Color colorActual) {
+    public void setColorActual(int colorActual) {
+        int oldColor = this.colorActual;
         this.colorActual = colorActual;
+        supportObserver.firePropertyChange(OBSERVER_COLOR, oldColor, colorActual);
+        logger.info("Se cambió el color");
     }
 
     public String getHerramientaSeleccionada() {
@@ -49,6 +63,14 @@ public class Pizarron {
     }
 
     public void setRango(int rango) {
+        int oldRango = this.rango;
         this.rango = rango;
+        supportObserver.firePropertyChange(OBSERVER_RANGO, oldRango, rango);
+        logger.info("Se cambió el rango");
+    }
+
+    public void addObserver(PropertyChangeListener observer) {
+        supportObserver.addPropertyChangeListener(observer);
+        logger.debug("Se ha añadido un nuevo observador");
     }
 }

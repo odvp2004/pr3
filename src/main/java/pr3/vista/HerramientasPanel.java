@@ -40,7 +40,7 @@ public class HerramientasPanel extends JPanel {
             JToggleButton selectedButton = (JToggleButton) e.getSource();
 
             if (selectedButton == cubetaButton && cubetaButton.isSelected()) {
-                modelo.setHerramientaSeleccionada(Pizarron.HERRAMIENTA_CUBETA);;
+                modelo.setHerramientaSeleccionada(Pizarron.HERRAMIENTA_CUBETA);
             } else if (selectedButton == lineaButton && lineaButton.isSelected()) {
                 modelo.setHerramientaSeleccionada(Pizarron.HERRAMIENTA_LINEA);
             } else if (selectedButton == pincelButton && pincelButton.isSelected()) {
