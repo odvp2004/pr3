@@ -16,10 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 public class ImagenPanel extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener {
     private Pizarron modelo;
@@ -115,13 +112,13 @@ public class ImagenPanel extends JPanel implements MouseListener, MouseMotionLis
     public void realizarAccionDePintado(Point point){
         switch (modelo.getHerramientaSeleccionada()){
             case Pizarron.HERRAMIENTA_CUBETA:
-                Pintar pintar = new Pintar(modelo.getImagen(), point, modelo.getColorActual(), modelo.getRango());
+                Pintar.hacer(modelo, point);
                 break;
             case Pizarron.HERRAMIENTA_PINCEL:
-                DibujarPunto dibujarPunto =new DibujarPunto(modelo.getImagen(), point, modelo.getColorActual());
+                DibujarPunto.hacer(modelo, point);
                 break;
             case Pizarron.HERRAMIENTA_LINEA:
-                DibujarLinea dibujarLinea = new DibujarLinea(modelo.getImagen(), puntoInicio, puntoFinal, modelo.getColorActual());
+                DibujarLinea.hacer(modelo, puntoInicio, puntoFinal);
                 break;
             case Pizarron.HERRAMIENTA_RECTANGULO:
                 int x = puntoInicio.x;
@@ -137,13 +134,13 @@ public class ImagenPanel extends JPanel implements MouseListener, MouseMotionLis
                     x = puntoFinal.x;
                 }
 
-                DibujarCuadrado dibujarCuadrado =new DibujarCuadrado(modelo.getImagen(), new Point(x,y), alto, ancho, modelo.getColorActual());
+                DibujarCuadrado.hacer(modelo, new Point(x,y), alto, ancho);
                 break;
 
         }
     }
     public void pincelar(int x1, int y1, int x2, int y2) {
-        DibujarLinea.di(modelo.getImagen(), new Point(x1,y1), new Point(x2,y2), modelo.getColorActual());
+        DibujarLinea.hacer(modelo, new Point(x1,y1), new Point(x2,y2));
     }
 
     public boolean validarEvento(MouseEvent e){
