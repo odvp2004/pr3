@@ -1,8 +1,5 @@
 package pr3.accionesImagen;
-
-import pr3.modelo.Imagen;
 import pr3.modelo.Pizarron;
-
 import java.awt.*;
 
 public class DibujarCuadrado {
