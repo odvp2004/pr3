@@ -1,5 +1,9 @@
 package pr3.vista;
 
+import pr3.cambiosImagen.ControladorCambiosImagen;
+import pr3.cambiosImagen.ICambioImagen;
+import pr3.cambiosImagen.Redo;
+import pr3.cambiosImagen.Undo;
 import pr3.excepciones.ImagenException;
 import pr3.manejoDeImagen.AbrirImagen;
 import pr3.manejoDeImagen.GuardarImagen;
@@ -17,15 +21,17 @@ public class ImagenFrame extends JFrame {
     private Pizarron modelo;
     private ImagenPanel centerPanel;
     private RightPanel rightPanel;
-    private JMenu jMenu;
-    private JMenuItem nuevoItem, guardarItem, salirItem;
+    private JMenu jMenuArchivo, jMenuEditar;
+    private JMenuItem nuevoItem, guardarItem, salirItem, undoItem, redoItem;
     private JMenuBar jMenubar;
     private static final Logger logger = LogManager.getRootLogger();
+    private ControladorCambiosImagen controladorImagen;
 
 
     public ImagenFrame(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(400,480));
+        this.controladorImagen = new ControladorCambiosImagen();
         init();
     }
 
@@ -44,6 +50,9 @@ public class ImagenFrame extends JFrame {
         guardarItem = new JMenuItem("Guardar Imagen");
         salirItem = new JMenuItem("Salir");
 
+        undoItem = new JMenuItem("Undo");
+        redoItem = new JMenuItem("Redo");
+
         salirItem.addActionListener(e -> {
             logger.info("Se ha cerrado el programa");
             System.exit(0);
@@ -52,12 +61,21 @@ public class ImagenFrame extends JFrame {
         nuevoItem.addActionListener(e -> manejarImagen(new AbrirImagen()));
         guardarItem.addActionListener(e -> manejarImagen(new GuardarImagen()));
 
-        jMenu = new JMenu("Archivo");
-        jMenu.add(nuevoItem);
-        jMenu.add(guardarItem);
-        jMenu.add(salirItem);
+        undoItem.addActionListener(e -> executeEditCommand(new Undo(modelo)));
+        redoItem.addActionListener(e -> executeEditCommand(new Redo(modelo)));
+
+        jMenuArchivo = new JMenu("Archivo");
+        jMenuArchivo.add(nuevoItem);
+        jMenuArchivo.add(guardarItem);
+        jMenuArchivo.add(salirItem);
         jMenubar = new JMenuBar();
-        jMenubar.add(jMenu);
+        jMenubar.add(jMenuArchivo);
+
+        jMenuEditar = new JMenu("Editar");
+        jMenuEditar.add(undoItem);
+        jMenuEditar.add(redoItem);
+        jMenubar.add(jMenuEditar);
+
         setJMenuBar(jMenubar);
         centerPanel.setPreferredSize(new Dimension(500,400));
 
@@ -74,5 +92,9 @@ public class ImagenFrame extends JFrame {
             e.printStackTrace();
         }
 
+    }
+    private void executeEditCommand(ICambioImagen cambioImagen){
+        controladorImagen.setCambioCommand(cambioImagen);
+        controladorImagen.execute();
     }
 }

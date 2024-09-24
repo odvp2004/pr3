@@ -1,5 +1,6 @@
 package pr3.modelo;
 
+import pr3.cambiosImagen.HistorialCambios;
 import pr3.floodFill.FloodFill;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,10 +17,12 @@ public class Imagen {
     private int[][] pixeles;
     private int width;
     private int height;
+    private HistorialCambios historialCambios;
     private PropertyChangeSupport supportObserver;
 
     public Imagen() {
         pixeles = new int[][]{};
+        historialCambios = new HistorialCambios();
         supportObserver = new PropertyChangeSupport(this);
 
     }
@@ -75,5 +78,7 @@ public class Imagen {
         return img;
     }
 
-
+    public HistorialCambios getHistorialCambios() {
+        return historialCambios;
+    }
 }

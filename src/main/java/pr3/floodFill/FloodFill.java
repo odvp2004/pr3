@@ -32,7 +32,10 @@ public class FloodFill {
 
     public int[][] floodFill(int[][] image, int x, int y, int newColor, int rango) {
         try {
-            this.image = image;
+            this.image = new int[image.length][];
+            for (int i = 0; i < image.length; i++) {
+                this.image[i] = image[i].clone();
+            }
             this.rango = rango;
             int oldColor = image[x][y];
             if (oldColor != newColor) {
@@ -41,7 +44,7 @@ public class FloodFill {
         } catch (Exception e){
             System.out.println(e);
         }
-        return image;
+        return this.image;
 
     }
 

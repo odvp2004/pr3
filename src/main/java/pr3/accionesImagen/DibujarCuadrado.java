@@ -5,7 +5,10 @@ import java.awt.*;
 public class DibujarCuadrado {
     public static void hacer(Pizarron modelo, Point puntoInicial, int alto, int ancho){
 
-        int[][] pixeles = modelo.getImagen().getPixeles();
+        int[][] pixeles = new int[modelo.getImagen().getPixeles().length][];
+        for (int i = 0; i < modelo.getImagen().getPixeles().length; i++) {
+            pixeles[i] = modelo.getImagen().getPixeles()[i].clone();
+        }
 
         for(int y= puntoInicial.y; y<=puntoInicial.y+alto; y++){
             pixeles[puntoInicial.x][y] = modelo.getColorActual();
@@ -15,7 +18,9 @@ public class DibujarCuadrado {
             pixeles[x][puntoInicial.y] = modelo.getColorActual();
             pixeles[x][puntoInicial.y + alto] = modelo.getColorActual();
         }
+
         modelo.getImagen().setPixeles(pixeles);
+        modelo.getImagen().getHistorialCambios().guardarPixeles(pixeles);
 
     }
 }

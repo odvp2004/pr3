@@ -46,6 +46,7 @@ public class AbrirImagen implements IManejoDeImagen{
                     }
                 }
                 modelo.setPixeles(pixeles);
+                modelo.getHistorialCambios().guardarPixeles(pixeles);
                 parent.pack();
 
             } catch (IOException ex) {

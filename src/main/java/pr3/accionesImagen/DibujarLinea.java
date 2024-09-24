@@ -23,7 +23,10 @@ public class DibujarLinea {
 
         int err = dx - dy;     //
 
-        int[][] pixeles = modelo.getImagen().getPixeles();
+        int[][] pixeles = new int[modelo.getImagen().getPixeles().length][];
+        for (int i = 0; i < modelo.getImagen().getPixeles().length; i++) {
+            pixeles[i] = modelo.getImagen().getPixeles()[i].clone();
+        }
 
         while (true) {
             pixeles[x0][y0] = modelo.getColorActual(); // Dibuja el punto actual
@@ -40,6 +43,9 @@ public class DibujarLinea {
             }
         }
         modelo.getImagen().setPixeles(pixeles);
+        if(modelo.getHerramientaSeleccionada().equals(Pizarron.HERRAMIENTA_LINEA)){
+            modelo.getImagen().getHistorialCambios().guardarPixeles(pixeles);
+        }
 
     }
 }

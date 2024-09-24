@@ -1,9 +1,6 @@
 package pr3.vista;
 
-import pr3.accionesImagen.DibujarCuadrado;
-import pr3.accionesImagen.DibujarLinea;
-import pr3.accionesImagen.DibujarPunto;
-import pr3.accionesImagen.Pintar;
+import pr3.accionesImagen.*;
 import pr3.modelo.Imagen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +8,7 @@ import pr3.modelo.Pizarron;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -154,7 +152,6 @@ public class ImagenPanel extends JPanel implements MouseListener, MouseMotionLis
                 }
                 DibujarCuadrado.hacer(modelo, new Point(x,y), alto, ancho);
                 break;
-
         }
     }
     public void previsualizacionFiguras(int x, int y, Graphics g){

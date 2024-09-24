@@ -2,6 +2,7 @@ package pr3.modelo;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pr3.cambiosImagen.HistorialCambios;
 
 import java.awt.*;
 import java.beans.PropertyChangeListener;
